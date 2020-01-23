@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/ArithmeticCalculatorSevlet"})
 public class ArithmeticCalculatorServlet extends HttpServlet {
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,26 +49,68 @@ public class ArithmeticCalculatorServlet extends HttpServlet {
         System.out.println("ArithmeticCalculatorServlet is running");
         
         
-        String firstValue = request.getParameter("firstValue");
-        String secondValue = request.getParameter("secondValue");
-        int firstValue2;
-        int secondValue2; 
+        String firstValue = request.getParameter("first");
+        String secondValue = request.getParameter("second");
+        System.out.println("first value: " + firstValue);
+        System.out.println("second value: " + secondValue);
+        int firstValue2 = 0;
+        int secondValue2 = 0; 
+        int result = 0;
         
-        if(firstValue != null && secondValue != null){
+        
+        
+        if(firstValue != null && secondValue != null && firstValue !="" && secondValue !="" ){
+            request.setAttribute("firstValue", firstValue);
+            request.setAttribute("secondValue", secondValue);
+            String btnVal = request.getParameter("mathematic");
             
+            try
+            {
             firstValue2 = Integer.parseInt(firstValue);
             secondValue2 = Integer.parseInt(secondValue);
+            }
+            catch(NumberFormatException e)
+            {
+                request.setAttribute("result","<p>Result: invalid</p>");
+                getServletContext().getRequestDispatcher("/arithmeticcalculator.jsp").forward(request, response);
+            }
+                    
+            if(btnVal.compareTo("add") == 0)
+                    {
+                        result = firstValue2 + secondValue2;
+                    }
+            else if(btnVal.compareTo("sub") == 0)
+                    {
+                        result = firstValue2 - secondValue2;
+                    }
+            else if(btnVal.compareTo("mult") == 0)
+                    {
+                        result = firstValue2*secondValue2;
+                    }
+            else if(btnVal.compareTo("div") == 0)
+                    {
+                        result = firstValue2/secondValue2;
+                    }
             
-            System.out.println("");
+            
+            
+           request.setAttribute("result","<p>Result: "+ result + "</p>");
+           getServletContext().getRequestDispatcher("/arithmeticcalculator.jsp").forward(request, response);
+            
+            
+            
  
         }
         else if (firstValue == null && secondValue == null)
         {
-            request.setAttribute("nextAge","<p>Result: --</p>");
+            
+            request.setAttribute("result","<p>Result: --</p>");
             getServletContext().getRequestDispatcher("/arithmeticcalculator.jsp").forward(request, response);
-        }else if (firstValue == null || secondValue == null)
+        }else if (firstValue == null || secondValue == null || firstValue == "" || secondValue == "")
         {
-            request.setAttribute("nextAge","<p>Result: invalid</p>");
+            request.setAttribute("firstValue", firstValue);
+            request.setAttribute("secondValue", secondValue);
+            request.setAttribute("result","<p>Result: invalid</p>");
             getServletContext().getRequestDispatcher("/arithmeticcalculator.jsp").forward(request, response);
         }
         
